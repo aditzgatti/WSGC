@@ -7,7 +7,7 @@ import cucumber.api.junit.Cucumber;;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-features={"src/test/java/search.features","src/test/java/StoreLocator.feature"},
+features={"src/test/java/search.feature","src/test/java/StoreLocator.feature"},
 format={"pretty","html:target/Reports"}
 )
 

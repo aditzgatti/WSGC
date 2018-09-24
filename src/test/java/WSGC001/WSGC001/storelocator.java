@@ -22,7 +22,7 @@ public class storelocator {
 	String url = "https:\\www.westelm.com";	
 	String mapurl="https://www.westelm.com/customer-service/store-locator.html?cm_sp=SuperNav-_-Stores#";
 	String storeurl = "https://www.westelm.com/customer-service/store-locator.html?cm_sp=SuperNav-_-Stores#viewStoreList";
-	
+String shit;	
 	@Given("^I am on the westelm homepage$")
 	public void i_am_on_the_westelm_homepage() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
@@ -38,8 +38,8 @@ public class storelocator {
 		obj.findElement(By.xpath("//*[@id='stores-link']")).click();
 	}
 	
-	@Then("^I select View All Stores link$")
-	public void i_select_View_All_Stores_link() throws InterruptedException {
+	@Then("^I select a store to check the number of stores$")
+	public void I_select_a_store_to_check_the_number_of_stores() throws InterruptedException {
 		System.out.println(obj.getCurrentUrl());
 		if(obj.getCurrentUrl().equals(storeurl)){
 		WebDriverWait wait = new WebDriverWait(obj, 60);
@@ -53,8 +53,11 @@ public class storelocator {
 							 obj.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 							Select USstate = new Select(obj.findElement(By.xpath("//SELECT[@id='state-list-selector']")));
 						    USstate.selectByValue("Arizona");
-						    USstate.deselectAll();
-						}
+						    assertTrue(isTextPresent("We have 2 stores in Arizona"));
+						    
+						    USstate.selectByValue("Texas");
+						    assertTrue(isTextPresent("We have 8 stores in Texas"));						    
+						     						}
 			}
 				
 		private void assertTrue(boolean textPresent) {
@@ -70,32 +73,9 @@ public class storelocator {
 		}
 		
 	}
-	
-	@Then("^I validate the number of stores returned$")
-	public void i_validate_the_number_of_stores_returned() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-		//We have 2 stores in Arizona :
-		assertTrue(isTextPresent("We have 2 stores in Arizona"));
-	}
-
-	@Then("^I select Texas from the Select Your State drop down$")
-	public void i_select_Texas_from_the_Select_Your_State_drop_down() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-		obj.findElement(By.xpath("//A[@href='#viewStoreList'][text()='View All Stores ▸']")).click();
-		obj.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-		Select USstate1 = new Select(obj.findElement(By.xpath("//SELECT[@id='state-list-selector']")));
-	    USstate1.selectByValue("Texas");
-	}
-	
-	@And("^I validate the number of stores returned1$")
-	public void i_validate_the_number_of_stores_returned1() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-			assertTrue(isTextPresent("We have 8 stores in Texas"));
-	}
-
 	@Then("^I quit the browser$")
 	public void i_quit_the_browser() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
+	    obj.quit();
 	}
 }
