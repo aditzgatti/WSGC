@@ -7,7 +7,10 @@ import cucumber.api.java.en.Then;
 import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 
 public class westelm {
 public static WebDriver obj = null;
@@ -53,13 +56,20 @@ String sku = "2613243";
 
 	@Then("^I navigate to the result page$")
 	public void i_navigate_to_the_result_page() {
-	    // Write code here that turns the phrase above into concrete actions
-	    //Andes Extra Deep Depth Armless 1 Seater, Twill, Regal Blue, Blackened Brass
-		assertTrue(isTextPresent("Andes Extra Deep Depth Armless 1 Seater, Twill, Regal Blue, Blackened Brass"));
+	    		try {
+			assertTrue(isTextPresent("Andes Extra Deep Depth Armless 1 Seater, Twill, Regal Blue, Blackened Brass"));
+			System.out.println("is text");
+		}catch (Exception tttt) {
+			System.out.println("no text");
+		}
 		
-	}
-
-
+	    		try {obj.findElement(By.xpath("//IMG[@id='hero']"));
+	    		System.out.println("Image not displayed.");}
+        	 catch (Exception noimage){
+        		 System.out.println("no image");
+         }
+    }
+//=====================
 	private void assertTrue(boolean textPresent) {
 		// TODO Auto-generated method stub
 		
@@ -78,8 +88,8 @@ String sku = "2613243";
 	
 	@Then("^I get a search result message$")
 	public void i_get_a_search_result_message() {
-		assertTrue(isSearchResults("We are unable to recognize the catalog quick shop number you entered. Please check your product number and re-enter. Example: 89-9169715."));	
-	}
+		assertTrue(isSearchResults("We are unable to recognize the catalog quick shop number you entered. Please check your product number and re-enter. Example: 89-9169715."));
+			}
 		
 	@And("^I close the browser$")
 	public void i_close_the_browser() {

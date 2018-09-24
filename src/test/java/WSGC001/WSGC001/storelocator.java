@@ -3,6 +3,8 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import junit.framework.Assert;
+
 import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class storelocator {
 	public static WebDriver obj = null;
 	String url = "https:\\www.westelm.com";	
-	
+	String mapurl="https://www.westelm.com/customer-service/store-locator.html?cm_sp=SuperNav-_-Stores#";
+	String storeurl = "https://www.westelm.com/customer-service/store-locator.html?cm_sp=SuperNav-_-Stores#viewStoreList";
 	
 	@Given("^I am on the westelm homepage$")
 	public void i_am_on_the_westelm_homepage() throws Throwable {
@@ -32,42 +36,28 @@ public class storelocator {
 	    // Write code here that turns the phrase above into concrete actions
 	    
 		obj.findElement(By.xpath("//*[@id='stores-link']")).click();
-		
-	    	}
-
-	
-	//check for text view all stores
-	protected boolean isvasPresent(String text){
-		try{
-			boolean d = obj.getPageSource().contains(text);
-			return d;
-		} catch (Exception e) {
-			return false;
-		}
-		
 	}
 	
-				@Then("^I select View All Stores link$")
+	@Then("^I select View All Stores link$")
 	public void i_select_View_All_Stores_link() throws InterruptedException {
-		//obj.manage().window().maximize();
-		Thread.sleep(6000);
-		assertTrue(isvasPresent("View All Stores"));
-		
-obj.findElement(By.xpath("//*[@id='store-locator']/main/div[3]/div[2]/section[1]/section[1]/div[3]/a"));
-	//obj.findElement(By.xpath("//*[@id='store-locator']/main/div[3]/div[2]/section[2]/div[1]/div[2]/a]")).click();
-	
-	}
+		System.out.println(obj.getCurrentUrl());
+		if(obj.getCurrentUrl().equals(storeurl)){
+		WebDriverWait wait = new WebDriverWait(obj, 60);
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//SELECT[@id='state-list-selector']")));
+		obj.findElement(By.xpath("//SELECT[@id='state-list-selector']")).click();
+		}else if 
+		(obj.getCurrentUrl().equals(mapurl)){
+							WebDriverWait wait1 = new WebDriverWait(obj, 60);
+							wait1.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//A[@href='#viewStoreList'][text()='View All Stores ▸']")));
+							obj.findElement(By.xpath("//A[@href='#viewStoreList'][text()='View All Stores ▸']")).click();
+							 obj.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+							Select USstate = new Select(obj.findElement(By.xpath("//SELECT[@id='state-list-selector']")));
+						    USstate.selectByValue("Arizona");
+						    USstate.deselectAll();
+						}
+			}
 				
-	@Then("^I select Arizona from the Select Your State drop down$")
-	public void i_select_Arizona_from_the_Select_Your_State_drop_down() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    obj.findElement(By.xpath("//*[@id='state-list-selector']"));
-	    Select USstate = new Select(obj.findElement(By.xpath("//*[@id='state-list-selector']")));
-	    USstate.selectByVisibleText("Arizona");
-	    }
-
-	
-	private void assertTrue(boolean textPresent) {
+		private void assertTrue(boolean textPresent) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -88,14 +78,13 @@ obj.findElement(By.xpath("//*[@id='store-locator']/main/div[3]/div[2]/section[1]
 		assertTrue(isTextPresent("We have 2 stores in Arizona"));
 	}
 
-	
-
 	@Then("^I select Texas from the Select Your State drop down$")
 	public void i_select_Texas_from_the_Select_Your_State_drop_down() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-		obj.findElement(By.xpath("//*[@id='state-list-selector']"));
-	    Select USstate = new Select(obj.findElement(By.xpath("//*[@id='state-list-selector']")));
-	    USstate.selectByVisibleText("Texas");
+		obj.findElement(By.xpath("//A[@href='#viewStoreList'][text()='View All Stores ▸']")).click();
+		obj.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+		Select USstate1 = new Select(obj.findElement(By.xpath("//SELECT[@id='state-list-selector']")));
+	    USstate1.selectByValue("Texas");
 	}
 	
 	@And("^I validate the number of stores returned1$")
@@ -109,10 +98,4 @@ obj.findElement(By.xpath("//*[@id='store-locator']/main/div[3]/div[2]/section[1]
 	    // Write code here that turns the phrase above into concrete actions
 	    throw new PendingException();
 	}
-
-
-	
-	
-	
-
 }
